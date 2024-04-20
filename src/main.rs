@@ -26,8 +26,17 @@ fn main() {
             (
                 // Physics
                 (physics::update_velocity, physics::update_position).chain(),
-                ship::draw_ship,
-                (asteroid::spawn_asteroids, asteroid::draw_asteroids),
+                (
+                    ship::rotate_ship,
+                    ship::accelerate_ship,
+                    ship::wrap_ships.after(physics::update_position),
+                    ship::draw_ships,
+                ),
+                (
+                    asteroid::spawn_asteroids,
+                    asteroid::despawn_asteroids,
+                    asteroid::draw_asteroids,
+                ),
             ),
         )
         .run();
