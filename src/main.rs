@@ -1,20 +1,25 @@
 mod asteroid;
 mod physics;
 mod ship;
+mod math;
 
 use bevy::{prelude::*, window::WindowResolution};
+use bevy_turborand::prelude::*;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins.set(WindowPlugin {
-            primary_window: Some(Window {
-                resolution: WindowResolution::new(512., 512.),
-                title: "Asteroids".into(),
-                resizable: false,
+        .add_plugins((
+            DefaultPlugins.set(WindowPlugin {
+                primary_window: Some(Window {
+                    resolution: WindowResolution::new(512., 512.),
+                    title: "Asteroids".into(),
+                    resizable: false,
+                    ..default()
+                }),
                 ..default()
             }),
-            ..default()
-        }))
+            RngPlugin::new(),
+        ))
         .add_systems(Startup, (spawn_camera, ship::spawn_ship))
         .add_systems(
             Update,
