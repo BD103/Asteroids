@@ -1,7 +1,7 @@
 mod asteroid;
+mod math;
 mod physics;
 mod ship;
-mod math;
 
 use bevy::{prelude::*, window::WindowResolution};
 use bevy_turborand::prelude::*;

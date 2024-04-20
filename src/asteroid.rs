@@ -1,11 +1,15 @@
+use crate::{math, physics};
 use bevy::prelude::*;
 use bevy_turborand::prelude::*;
-use crate::{math, physics};
 
 #[derive(Component, Default)]
 pub struct Asteroid;
 
-pub fn spawn_asteroids(mut commands: Commands, input: Res<ButtonInput<KeyCode>>, mut rng: ResMut<GlobalRng>) {
+pub fn spawn_asteroids(
+    mut commands: Commands,
+    input: Res<ButtonInput<KeyCode>>,
+    mut rng: ResMut<GlobalRng>,
+) {
     if input.pressed(KeyCode::Space) {
         // Calculate starting position, along 1 of 4 possible edges.
         let position = match rng.u8(0..4) {
@@ -26,7 +30,10 @@ pub fn spawn_asteroids(mut commands: Commands, input: Res<ButtonInput<KeyCode>>,
 
 pub fn draw_asteroids(query: Query<&Transform, With<Asteroid>>, mut gizmos: Gizmos) {
     for transform in &query {
-        let position = Vec2::new(transform.translation.x, transform.translation.y);
-        gizmos.circle_2d(position, 8.0, Color::WHITE);
+        gizmos.circle_2d(
+            math::decompose_vec3(transform.translation),
+            8.0,
+            Color::WHITE,
+        );
     }
 }

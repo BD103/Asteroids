@@ -4,10 +4,7 @@ use bevy::prelude::*;
 pub struct Ship;
 
 pub fn spawn_ship(mut commands: Commands) {
-    commands.spawn((
-        Ship,
-        Transform::default(),
-    ));
+    commands.spawn((Ship, Transform::default()));
 }
 
 pub fn draw_ship(query: Query<&Transform, With<Ship>>, mut gizmos: Gizmos) {
