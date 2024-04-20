@@ -7,10 +7,9 @@ pub struct Asteroid;
 
 pub fn spawn_asteroids(
     mut commands: Commands,
-    input: Res<ButtonInput<KeyCode>>,
     mut rng: ResMut<GlobalRng>,
 ) {
-    if input.pressed(KeyCode::Space) {
+    if rng.chance(0.05) {
         // Calculate starting position, along 1 of 4 possible edges.
         let position = match rng.u8(0..4) {
             0 => Vec2::new(rng.f32_normalized() * 64., 64.),
