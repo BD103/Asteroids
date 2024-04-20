@@ -1,10 +1,10 @@
 use bevy::prelude::*;
 
 #[derive(Component, Deref, DerefMut, Default)]
-pub struct Velocity(Vec2);
+pub struct Velocity(pub Vec2);
 
 #[derive(Component, Deref, DerefMut, Default)]
-pub struct Acceleration(Vec2);
+pub struct Acceleration(pub Vec2);
 
 pub fn update_position(mut query: Query<(&mut Transform, &Velocity)>) {
     for (mut transform, velocity) in &mut query {
