@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{math, physics};
+use crate::{physics, utils};
 
 #[derive(Component, Default)]
 pub struct Ship;
@@ -38,7 +38,8 @@ pub fn accelerate_ship(
     if input.pressed(KeyCode::ArrowUp) {
         let (mut acceleration, transform) = query.single_mut();
 
-        **acceleration = math::decompose_vec3(*transform.local_x()) * 4096.0 * time.delta_seconds();
+        **acceleration =
+            utils::decompose_vec3(*transform.local_x()) * 4096.0 * time.delta_seconds();
     } else {
         let (mut acceleration, _) = query.single_mut();
         **acceleration = Vec2::ZERO;
@@ -47,21 +48,21 @@ pub fn accelerate_ship(
 
 pub fn wrap_ships(mut query: Query<&mut Transform, With<Ship>>) {
     for mut transform in &mut query {
-        let mut pos = math::decompose_vec3(transform.translation);
+        let mut pos = utils::decompose_vec3(transform.translation);
 
         pos += 64.0;
         // Euclidian remainder, similar to Java, to discard the sign.
         pos = pos.rem_euclid(Vec2::splat(128.0));
         pos -= 64.0;
 
-        transform.translation = math::compose_vec3(pos, transform.translation.z);
+        transform.translation = utils::compose_vec3(pos, transform.translation.z);
     }
 }
 
 pub fn draw_ships(query: Query<&Transform, With<Ship>>, mut gizmos: Gizmos) {
     for transform in &query {
-        let start = math::decompose_vec3(transform.translation);
-        let end = math::decompose_vec3(transform.translation + transform.local_x() * 10.0);
+        let start = utils::decompose_vec3(transform.translation);
+        let end = utils::decompose_vec3(transform.translation + transform.local_x() * 10.0);
 
         gizmos.arrow_2d(start, end, Color::WHITE);
     }
