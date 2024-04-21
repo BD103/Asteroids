@@ -60,10 +60,8 @@ pub fn wrap_ships(mut query: Query<&mut Transform, With<Ship>>) {
 
 pub fn draw_ships(query: Query<&Transform, With<Ship>>, mut gizmos: Gizmos) {
     for transform in &query {
-        let start = Vec2::new(transform.translation.x, transform.translation.y);
-
-        let end = transform.translation + transform.local_x() * 10.0;
-        let end = Vec2::new(end.x, end.y);
+        let start = math::decompose_vec3(transform.translation);
+        let end = math::decompose_vec3(transform.translation + transform.local_x() * 10.0);
 
         gizmos.arrow_2d(start, end, Color::WHITE);
     }
