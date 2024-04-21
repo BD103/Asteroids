@@ -8,8 +8,11 @@ use bevy_turborand::prelude::*;
 #[derive(Component, Default)]
 pub struct Asteroid;
 
-pub fn spawn_asteroids(mut commands: Commands, mut rng: ResMut<GlobalRng>) {
-    if rng.chance(0.05) {
+pub fn spawn_asteroids(mut commands: Commands, mut rng: ResMut<GlobalRng>, time: Res<Time>) {
+    // Game gets progressively harder, following a sqrt curve.
+    let chance = (time.elapsed_seconds_f64() * 0.00005).sqrt();
+
+    if rng.chance(chance) {
         // Calculate starting position, along 1 of 4 possible edges.
         let position = match rng.u8(0..4) {
             0 => Vec2::new(rng.f32_normalized() * 64.0, 64.0),
