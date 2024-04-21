@@ -1,14 +1,12 @@
 mod asteroid;
 mod bullet;
 mod physics;
+mod score;
 mod ship;
 mod utils;
 
 use bevy::{prelude::*, window::WindowResolution};
 use bevy_turborand::prelude::*;
-
-#[derive(Resource, Deref, DerefMut, Default)]
-pub struct Score(u32);
 
 fn main() {
     App::new()
@@ -24,7 +22,10 @@ fn main() {
             }),
             RngPlugin::new(),
         ))
-        .add_systems(Startup, (spawn_camera, ship::spawn_ship))
+        .add_systems(
+            Startup,
+            (spawn_camera, ship::spawn_ship, score::spawn_score_display),
+        )
         .add_systems(
             Update,
             (
@@ -50,9 +51,12 @@ fn main() {
                     utils::despawn_off_screen::<bullet::Bullet, 4>,
                     bullet::draw_bullets,
                 ),
+                // Score
+                score::update_score_display,
             ),
         )
-        .init_resource::<Score>()
+        .init_resource::<score::Score>()
+        .insert_resource(ClearColor(Color::BLACK))
         .run();
 }
 

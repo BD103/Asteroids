@@ -12,9 +12,9 @@ default-features = false
 features = [
     "bevy_asset",
     # "bevy_audio",
-    # "bevy_core_pipeline",
+    "bevy_core_pipeline",
     "bevy_gizmos",
-    # "bevy_render",
+    "bevy_render",
     "bevy_sprite",
     "bevy_text",
     "bevy_winit",

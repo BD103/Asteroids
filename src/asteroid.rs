@@ -1,4 +1,4 @@
-use crate::{bullet, physics, utils};
+use crate::{bullet, physics, score, utils};
 use bevy::{
     math::bounding::{BoundingCircle, IntersectsVolume},
     prelude::*,
@@ -34,6 +34,7 @@ pub fn bullets_hit_asteroids(
     asteroids: Query<(Entity, &Transform), With<Asteroid>>,
     bullets: Query<(Entity, &Transform), With<bullet::Bullet>>,
     mut commands: Commands,
+    mut score: ResMut<score::Score>,
 ) {
     for (asteroid_entity, asteroid_transform) in &asteroids {
         let asteroid_bounds =
@@ -46,6 +47,9 @@ pub fn bullets_hit_asteroids(
             if asteroid_bounds.intersects(&bullet_bounds) {
                 commands.entity(asteroid_entity).despawn();
                 commands.entity(bullet_entity).despawn();
+
+                **score += 100;
+
                 break;
             }
         }
