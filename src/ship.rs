@@ -1,6 +1,9 @@
-use bevy::prelude::*;
+use bevy::{
+    math::bounding::{BoundingCircle, IntersectsVolume},
+    prelude::*,
+};
 
-use crate::{physics, utils};
+use crate::{asteroid, physics, utils};
 
 #[derive(Component, Default)]
 pub struct Ship;
@@ -19,7 +22,9 @@ pub fn rotate_ship(
     input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
-    let mut transform = query.single_mut();
+    let Ok(mut transform) = query.get_single_mut() else {
+        return;
+    };
 
     if input.pressed(KeyCode::ArrowLeft) {
         transform.rotate_z(time.delta_seconds() * 8.0);
@@ -35,13 +40,14 @@ pub fn accelerate_ship(
     input: Res<ButtonInput<KeyCode>>,
     time: Res<Time>,
 ) {
-    if input.pressed(KeyCode::ArrowUp) {
-        let (mut acceleration, transform) = query.single_mut();
+    let Ok((mut acceleration, transform)) = query.get_single_mut() else {
+        return;
+    };
 
+    if input.pressed(KeyCode::ArrowUp) {
         **acceleration =
             utils::decompose_vec3(*transform.local_x()) * 4096.0 * time.delta_seconds();
     } else {
-        let (mut acceleration, _) = query.single_mut();
         **acceleration = Vec2::ZERO;
     }
 }
@@ -56,6 +62,43 @@ pub fn wrap_ships(mut query: Query<&mut Transform, With<Ship>>) {
         pos -= 64.0;
 
         transform.translation = utils::compose_vec3(pos, transform.translation.z);
+    }
+}
+
+pub fn ship_asteroid_collision(
+    ship_query: Query<(Entity, &Transform), With<Ship>>,
+    asteroid_query: Query<&Transform, With<asteroid::Asteroid>>,
+    mut commands: Commands,
+    asset_server: Res<AssetServer>,
+) {
+    let Ok((ship_entity, ship_transform)) = ship_query.get_single() else {
+        return;
+    };
+
+    let ship_bounds = BoundingCircle::new(utils::decompose_vec3(ship_transform.translation), 4.0);
+
+    for asteroid_transform in &asteroid_query {
+        let asteroid_bounds =
+            BoundingCircle::new(utils::decompose_vec3(asteroid_transform.translation), 8.0);
+
+        if ship_bounds.intersects(&asteroid_bounds) {
+            commands.entity(ship_entity).despawn();
+
+            commands.spawn(Text2dBundle {
+                text: Text::from_section(
+                    "Game Over",
+                    TextStyle {
+                        font: asset_server.load("FiraMono-Medium.ttf"),
+                        font_size: 8.0,
+                        color: Color::WHITE,
+                    },
+                )
+                .with_no_wrap(),
+                ..default()
+            });
+
+            break;
+        }
     }
 }
 

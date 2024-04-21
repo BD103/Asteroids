@@ -30,17 +30,17 @@ pub fn spawn_asteroids(mut commands: Commands, mut rng: ResMut<GlobalRng>) {
     }
 }
 
-pub fn bullets_hit_asteroids(
-    asteroids: Query<(Entity, &Transform), With<Asteroid>>,
-    bullets: Query<(Entity, &Transform), With<bullet::Bullet>>,
+pub fn asteroid_bullet_collision(
+    asteroids_query: Query<(Entity, &Transform), With<Asteroid>>,
+    bullets_query: Query<(Entity, &Transform), With<bullet::Bullet>>,
     mut commands: Commands,
     mut score: ResMut<score::Score>,
 ) {
-    for (asteroid_entity, asteroid_transform) in &asteroids {
+    for (asteroid_entity, asteroid_transform) in &asteroids_query {
         let asteroid_bounds =
             BoundingCircle::new(utils::decompose_vec3(asteroid_transform.translation), 8.0);
 
-        for (bullet_entity, bullet_transform) in &bullets {
+        for (bullet_entity, bullet_transform) in &bullets_query {
             let bullet_bounds =
                 BoundingCircle::new(utils::decompose_vec3(bullet_transform.translation), 2.0);
 

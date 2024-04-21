@@ -36,13 +36,14 @@ fn main() {
                     ship::rotate_ship,
                     ship::accelerate_ship,
                     ship::wrap_ships.after(physics::update_position),
+                    ship::ship_asteroid_collision,
                     ship::draw_ships,
                 ),
                 // Asteroids
                 (
                     asteroid::spawn_asteroids,
                     utils::despawn_off_screen::<asteroid::Asteroid, 8>,
-                    asteroid::bullets_hit_asteroids,
+                    asteroid::asteroid_bullet_collision,
                     asteroid::draw_asteroids,
                 ),
                 // Bullets

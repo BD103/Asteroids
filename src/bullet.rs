@@ -11,7 +11,10 @@ pub fn spawn_bullets(
     query: Query<&Transform, With<ship::Ship>>,
 ) {
     if input.just_pressed(KeyCode::Space) {
-        let transform = query.single();
+        let Ok(transform) = query.get_single() else {
+            return;
+        };
+
         let velocity = physics::Velocity(utils::decompose_vec3(*transform.local_x()) * 80.0);
 
         commands.spawn((Bullet, *transform, velocity));
