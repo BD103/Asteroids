@@ -1,5 +1,8 @@
-use crate::{physics, utils};
-use bevy::prelude::*;
+use crate::{bullet, physics, utils};
+use bevy::{
+    math::bounding::{BoundingCircle, IntersectsVolume},
+    prelude::*,
+};
 use bevy_turborand::prelude::*;
 
 #[derive(Component, Default)]
@@ -24,6 +27,28 @@ pub fn spawn_asteroids(mut commands: Commands, mut rng: ResMut<GlobalRng>) {
             Transform::from_translation(utils::compose_vec3(position, 0.0)),
             physics::Velocity(Vec2::from_angle(velocity_angle) * 32.0),
         ));
+    }
+}
+
+pub fn bullets_hit_asteroids(
+    asteroids: Query<(Entity, &Transform), With<Asteroid>>,
+    bullets: Query<(Entity, &Transform), With<bullet::Bullet>>,
+    mut commands: Commands,
+) {
+    for (asteroid_entity, asteroid_transform) in &asteroids {
+        let asteroid_bounds =
+            BoundingCircle::new(utils::decompose_vec3(asteroid_transform.translation), 8.0);
+
+        for (bullet_entity, bullet_transform) in &bullets {
+            let bullet_bounds =
+                BoundingCircle::new(utils::decompose_vec3(bullet_transform.translation), 2.0);
+
+            if asteroid_bounds.intersects(&bullet_bounds) {
+                commands.entity(asteroid_entity).despawn();
+                commands.entity(bullet_entity).despawn();
+                break;
+            }
+        }
     }
 }
 

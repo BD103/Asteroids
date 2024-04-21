@@ -41,6 +41,7 @@ fn main() {
                 (
                     asteroid::spawn_asteroids,
                     utils::despawn_off_screen::<asteroid::Asteroid, 8>,
+                    asteroid::bullets_hit_asteroids,
                     asteroid::draw_asteroids,
                 ),
                 // Bullets
