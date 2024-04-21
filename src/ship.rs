@@ -22,11 +22,11 @@ pub fn rotate_ship(
     let mut transform = query.single_mut();
 
     if input.pressed(KeyCode::ArrowLeft) {
-        transform.rotate_z(time.delta_seconds() * 4.0);
+        transform.rotate_z(time.delta_seconds() * 8.0);
     }
 
     if input.pressed(KeyCode::ArrowRight) {
-        transform.rotate_z(-time.delta_seconds() * 4.0);
+        transform.rotate_z(-time.delta_seconds() * 8.0);
     }
 }
 
