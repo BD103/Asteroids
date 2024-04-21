@@ -1,10 +1,10 @@
 use crate::math;
 use bevy::prelude::*;
 
-#[derive(Component, Deref, DerefMut, Default)]
+#[derive(Component, Clone, Copy, Deref, DerefMut, Default)]
 pub struct Velocity(pub Vec2);
 
-#[derive(Component, Deref, DerefMut, Default)]
+#[derive(Component, Clone, Copy, Deref, DerefMut, Default)]
 pub struct Acceleration(pub Vec2);
 
 pub fn update_position(mut query: Query<(&mut Transform, &Velocity)>, time: Res<Time>) {
