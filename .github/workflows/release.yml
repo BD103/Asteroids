@@ -35,7 +35,7 @@ jobs:
         run: zip --recurse-paths ../${{ env.binary }}.zip .
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.binary }}.zip
           name: wasm
@@ -75,7 +75,7 @@ jobs:
         run: zip --recurse-paths ../${{ env.binary }}.zip .
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.binary }}.zip
           name: linux
@@ -107,7 +107,7 @@ jobs:
         run: Compress-Archive -Path windows/* -DestinationPath ${{ env.binary }}.zip
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.binary }}.zip
           name: windows
@@ -141,7 +141,7 @@ jobs:
           hdiutil create -fs HFS+ -volname "${{ env.binary }}" -srcfolder ${{ env.binary }}.app ${{ env.binary }}-macos-intel.dmg
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.binary }}-macos-intel.dmg
           name: macos-intel
@@ -175,7 +175,7 @@ jobs:
           hdiutil create -fs HFS+ -volname "${{ env.binary }}-macos-apple-silicon" -srcfolder ${{ env.binary }}.app ${{ env.binary }}-macos-apple-silicon.dmg
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           path: ${{ env.binary }}-macos-apple-silicon.dmg
           name: macos-apple-silicon
