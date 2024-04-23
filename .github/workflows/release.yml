@@ -58,8 +58,8 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends libasound2-dev libudev-dev
 
-          # Wayland specific, disabled for now
-          # sudo apt-get install --no-install-recommends libwayland-dev libxkbcommon-dev
+          # Wayland specific
+          sudo apt-get install --no-install-recommends libwayland-dev libxkbcommon-dev
 
       - name: Build project
         run: cargo build --release --target x86_64-unknown-linux-gnu
