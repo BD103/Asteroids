@@ -11,15 +11,17 @@ use bevy_turborand::prelude::*;
 fn main() {
     App::new()
         .add_plugins((
-            DefaultPlugins.set(WindowPlugin {
-                primary_window: Some(Window {
-                    resolution: WindowResolution::new(512.0, 512.0),
-                    title: "Asteroids".into(),
-                    resizable: false,
+            DefaultPlugins
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        resolution: WindowResolution::new(512.0, 512.0),
+                        title: "Asteroids".into(),
+                        resizable: false,
+                        ..default()
+                    }),
                     ..default()
-                }),
-                ..default()
-            }),
+                })
+                .set(ImagePlugin::default_nearest()),
             RngPlugin::new(),
         ))
         .add_systems(
