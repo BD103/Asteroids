@@ -7,7 +7,6 @@ edition = "2021"
 version = "0.13.2"
 default-features = false
 features = [
-    "bevy_asset",
     "bevy_core_pipeline",
     "bevy_gizmos",
     "bevy_render",
@@ -15,10 +14,14 @@ features = [
     "bevy_text",
     "bevy_winit",
     "multi-threaded",
-    # "bevy_audio",
-    # "vorbis",
-    # "webgl2",
-    # "x11",
+    # Scoreboard and game over screen
+    "default_font",
+
+    # For WASM support
+    "webgl2",
+
+    # For Linux support
+    "x11",
 ]
 
 [dependencies]
