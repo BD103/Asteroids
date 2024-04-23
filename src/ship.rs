@@ -69,7 +69,6 @@ pub fn ship_asteroid_collision(
     ship_query: Query<(Entity, &Transform), With<Ship>>,
     asteroid_query: Query<&Transform, With<asteroid::Asteroid>>,
     mut commands: Commands,
-    asset_server: Res<AssetServer>,
 ) {
     let Ok((ship_entity, ship_transform)) = ship_query.get_single() else {
         return;
@@ -88,9 +87,9 @@ pub fn ship_asteroid_collision(
                 text: Text::from_section(
                     "Game Over",
                     TextStyle {
-                        font: asset_server.load("FiraMono-Medium.ttf"),
                         font_size: 8.0,
                         color: Color::WHITE,
+                        ..default()
                     },
                 )
                 .with_no_wrap(),
