@@ -22,7 +22,7 @@ features = [
     "webgl2",
 
     # For Linux support
-    "x11",
+    # "x11",
     "wayland",
 ]
 
