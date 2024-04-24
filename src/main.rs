@@ -1,11 +1,12 @@
 mod asteroid;
 mod bullet;
+mod color;
 mod physics;
 mod score;
 mod ship;
 mod utils;
 
-use bevy::{prelude::*, window::WindowResolution};
+use bevy::prelude::*;
 use bevy_turborand::prelude::*;
 
 const VIEWPORT: Rect = {
@@ -18,19 +19,19 @@ const VIEWPORT: Rect = {
 };
 
 fn main() {
+    use bevy::window::WindowResolution;
+
     App::new()
         .add_plugins((
-            DefaultPlugins
-                .set(WindowPlugin {
-                    primary_window: Some(Window {
-                        resolution: WindowResolution::new(512.0, 512.0),
-                        title: "Asteroids".into(),
-                        resizable: false,
-                        ..default()
-                    }),
+            DefaultPlugins.set(WindowPlugin {
+                primary_window: Some(Window {
+                    resolution: WindowResolution::new(512.0, 512.0),
+                    title: "Asteroids".into(),
+                    resizable: false,
                     ..default()
-                })
-                .set(ImagePlugin::default_nearest()),
+                }),
+                ..default()
+            }),
             RngPlugin::new(),
         ))
         .add_systems(
@@ -73,19 +74,30 @@ fn main() {
 }
 
 pub fn spawn_camera(mut commands: Commands) {
-    use bevy::render::camera::ScalingMode;
+    use bevy::{
+        core_pipeline::{bloom::BloomSettings, tonemapping::Tonemapping},
+        render::camera::ScalingMode,
+    };
 
     let size = VIEWPORT.size();
 
-    commands.spawn(Camera2dBundle {
-        projection: OrthographicProjection {
-            // World goes from -64 to +64 on X and Y axis.
-            scaling_mode: ScalingMode::Fixed {
-                width: size.x,
-                height: size.y,
+    commands.spawn((
+        Camera2dBundle {
+            camera: Camera {
+                hdr: true,
+                ..default()
             },
+            projection: OrthographicProjection {
+                // World goes from -64 to +64 on X and Y axis.
+                scaling_mode: ScalingMode::Fixed {
+                    width: size.x,
+                    height: size.y,
+                },
+                ..default()
+            },
+            tonemapping: Tonemapping::TonyMcMapface,
             ..default()
         },
-        ..default()
-    });
+        BloomSettings::NATURAL,
+    ));
 }

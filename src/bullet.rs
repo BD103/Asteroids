@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{physics, ship, utils};
+use crate::{color, physics, ship, utils};
 
 #[derive(Component, Default)]
 pub struct Bullet;
@@ -26,6 +26,6 @@ pub fn draw_bullets(query: Query<&Transform, With<Bullet>>, mut gizmos: Gizmos) 
         let start = utils::decompose_vec3(transform.translation);
         let vector = utils::decompose_vec3(transform.local_x() * 4.0);
 
-        gizmos.ray_2d(start, vector, Color::WHITE);
+        gizmos.ray_2d(start, vector, color::BRIGHT_WHITE);
     }
 }

@@ -1,4 +1,4 @@
-use crate::{bullet, physics, score, utils, VIEWPORT};
+use crate::{bullet, color, physics, score, utils, VIEWPORT};
 use bevy::{
     math::bounding::{BoundingCircle, IntersectsVolume},
     prelude::*,
@@ -67,7 +67,7 @@ pub fn draw_asteroids(query: Query<&Transform, With<Asteroid>>, mut gizmos: Gizm
         gizmos.circle_2d(
             utils::decompose_vec3(transform.translation),
             8.0,
-            Color::WHITE,
+            color::BRIGHT_WHITE,
         );
     }
 }
