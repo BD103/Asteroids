@@ -1,4 +1,4 @@
-use crate::{bullet, physics, score, utils};
+use crate::{bullet, physics, score, utils, VIEWPORT};
 use bevy::{
     math::bounding::{BoundingCircle, IntersectsVolume},
     prelude::*,
@@ -13,12 +13,14 @@ pub fn spawn_asteroids(mut commands: Commands, mut rng: ResMut<GlobalRng>, time:
     let chance = (time.elapsed_seconds_f64() * 0.00005).sqrt();
 
     if rng.chance(chance) {
+        let half_size = VIEWPORT.half_size();
+
         // Calculate starting position, along 1 of 4 possible edges.
         let position = match rng.u8(0..4) {
-            0 => Vec2::new(rng.f32_normalized() * 64.0, 64.0),
-            1 => Vec2::new(rng.f32_normalized() * 64.0, -64.0),
-            2 => Vec2::new(64.0, rng.f32_normalized() * 64.0),
-            3 => Vec2::new(-64.0, rng.f32_normalized() * 64.0),
+            0 => Vec2::new(rng.f32_normalized() * half_size.x, half_size.y),
+            1 => Vec2::new(rng.f32_normalized() * half_size.x, -half_size.y),
+            2 => Vec2::new(half_size.x, rng.f32_normalized() * half_size.y),
+            3 => Vec2::new(-half_size.x, rng.f32_normalized() * half_size.y),
             _ => unreachable!(),
         };
 

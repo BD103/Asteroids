@@ -3,7 +3,7 @@ use bevy::{
     prelude::*,
 };
 
-use crate::{asteroid, physics, utils};
+use crate::{asteroid, physics, utils, VIEWPORT};
 
 #[derive(Component, Default)]
 pub struct Ship;
@@ -53,13 +53,16 @@ pub fn accelerate_ship(
 }
 
 pub fn wrap_ships(mut query: Query<&mut Transform, With<Ship>>) {
+    let half_size = VIEWPORT.half_size();
+    let size = VIEWPORT.size();
+
     for mut transform in &mut query {
         let mut pos = utils::decompose_vec3(transform.translation);
 
-        pos += 64.0;
+        pos += half_size;
         // Euclidian remainder, similar to Java, to discard the sign.
-        pos = pos.rem_euclid(Vec2::splat(128.0));
-        pos -= 64.0;
+        pos = pos.rem_euclid(size);
+        pos -= half_size;
 
         transform.translation = utils::compose_vec3(pos, transform.translation.z);
     }

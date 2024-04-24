@@ -8,6 +8,15 @@ mod utils;
 use bevy::{prelude::*, window::WindowResolution};
 use bevy_turborand::prelude::*;
 
+const VIEWPORT: Rect = {
+    const BOUNDS: f32 = 64.0;
+
+    Rect {
+        min: Vec2::splat(-BOUNDS),
+        max: Vec2::splat(BOUNDS),
+    }
+};
+
 fn main() {
     App::new()
         .add_plugins((
@@ -66,12 +75,14 @@ fn main() {
 pub fn spawn_camera(mut commands: Commands) {
     use bevy::render::camera::ScalingMode;
 
+    let size = VIEWPORT.size();
+
     commands.spawn(Camera2dBundle {
         projection: OrthographicProjection {
             // World goes from -64 to +64 on X and Y axis.
             scaling_mode: ScalingMode::Fixed {
-                width: 128.0,
-                height: 128.0,
+                width: size.x,
+                height: size.y,
             },
             ..default()
         },

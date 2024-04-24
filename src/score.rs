@@ -1,5 +1,7 @@
 use bevy::{prelude::*, sprite::Anchor};
 
+use crate::VIEWPORT;
+
 #[derive(Resource, Deref, DerefMut, Default)]
 pub struct Score(u32);
 
@@ -19,7 +21,7 @@ pub fn spawn_score_display(mut commands: Commands) {
                 },
             )
             .with_no_wrap(),
-            transform: Transform::from_xyz(-62.0, 63.0, 0.0),
+            transform: Transform::from_xyz(VIEWPORT.min.x + 2.0, VIEWPORT.max.y - 1.0, 0.0),
             text_anchor: Anchor::TopLeft,
             ..default()
         },
