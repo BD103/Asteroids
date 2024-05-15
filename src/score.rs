@@ -1,6 +1,6 @@
 use bevy::{prelude::*, sprite::Anchor};
 
-use crate::{color, VIEWPORT};
+use crate::VIEWPORT;
 
 #[derive(Resource, Deref, DerefMut, Default)]
 pub struct Score(u32);
@@ -16,7 +16,7 @@ pub fn spawn_score_display(mut commands: Commands) {
                 "Score: 0",
                 TextStyle {
                     font_size: 8.0,
-                    color: color::WHITE,
+                    color: Color::WHITE,
                     ..default()
                 },
             )

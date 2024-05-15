@@ -18,9 +18,6 @@ features = [
     # Scoreboard and game over screen
     "default_font",
 
-    # Bloom
-    "tonemapping_luts",
-
     # For WASM support
     "webgl2",
 

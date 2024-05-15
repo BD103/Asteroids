@@ -3,7 +3,7 @@ use bevy::{
     prelude::*,
 };
 
-use crate::{asteroid, color, physics, VIEWPORT};
+use crate::{asteroid, physics, VIEWPORT};
 
 #[derive(Component, Default)]
 pub struct Ship;
@@ -91,7 +91,7 @@ pub fn ship_asteroid_collision(
                     "Game Over",
                     TextStyle {
                         font_size: 8.0,
-                        color: color::WHITE,
+                        color: Color::WHITE,
                         ..default()
                     },
                 )
@@ -109,6 +109,6 @@ pub fn draw_ships(query: Query<&Transform, With<Ship>>, mut gizmos: Gizmos) {
         let start = transform.translation.xy();
         let end = (transform.translation + *transform.local_x()).xy() * 10.0;
 
-        gizmos.arrow_2d(start, end, color::BRIGHT_WHITE);
+        gizmos.arrow_2d(start, end, Color::WHITE);
     }
 }
