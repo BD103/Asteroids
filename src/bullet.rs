@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 
-use crate::{color, physics, ship, utils};
+use crate::{color, physics, ship};
 
 #[derive(Component, Default)]
 pub struct Bullet;
@@ -15,7 +15,7 @@ pub fn spawn_bullets(
             return;
         };
 
-        let velocity = physics::Velocity(utils::decompose_vec3(*transform.local_x()) * 80.0);
+        let velocity = physics::Velocity(transform.local_x().xy() * 80.0);
 
         commands.spawn((Bullet, *transform, velocity));
     }
@@ -23,8 +23,8 @@ pub fn spawn_bullets(
 
 pub fn draw_bullets(query: Query<&Transform, With<Bullet>>, mut gizmos: Gizmos) {
     for transform in &query {
-        let start = utils::decompose_vec3(transform.translation);
-        let vector = utils::decompose_vec3(transform.local_x() * 4.0);
+        let start = transform.translation.xy();
+        let vector = (transform.local_x() * 4.0).xy();
 
         gizmos.ray_2d(start, vector, color::BRIGHT_WHITE);
     }

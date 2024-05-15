@@ -1,4 +1,4 @@
-use crate::{bullet, color, physics, score, utils, VIEWPORT};
+use crate::{bullet, color, physics, score, VIEWPORT};
 use bevy::{
     math::bounding::{BoundingCircle, IntersectsVolume},
     prelude::*,
@@ -29,7 +29,7 @@ pub fn spawn_asteroids(mut commands: Commands, mut rng: ResMut<GlobalRng>, time:
 
         commands.spawn((
             Asteroid,
-            Transform::from_translation(utils::compose_vec3(position, 0.0)),
+            Transform::from_translation(position.extend(0.0)),
             physics::Velocity(Vec2::from_angle(velocity_angle) * 32.0),
         ));
     }
@@ -43,11 +43,11 @@ pub fn asteroid_bullet_collision(
 ) {
     for (asteroid_entity, asteroid_transform) in &asteroids_query {
         let asteroid_bounds =
-            BoundingCircle::new(utils::decompose_vec3(asteroid_transform.translation), 8.0);
+            BoundingCircle::new(asteroid_transform.translation.xy(), 8.0);
 
         for (bullet_entity, bullet_transform) in &bullets_query {
             let bullet_bounds =
-                BoundingCircle::new(utils::decompose_vec3(bullet_transform.translation), 2.0);
+                BoundingCircle::new(bullet_transform.translation.xy(), 2.0);
 
             if asteroid_bounds.intersects(&bullet_bounds) {
                 commands.entity(asteroid_entity).despawn();
@@ -65,7 +65,7 @@ pub fn asteroid_bullet_collision(
 pub fn draw_asteroids(query: Query<&Transform, With<Asteroid>>, mut gizmos: Gizmos) {
     for transform in &query {
         gizmos.circle_2d(
-            utils::decompose_vec3(transform.translation),
+            transform.translation.xy(),
             8.0,
             color::BRIGHT_WHITE,
         );

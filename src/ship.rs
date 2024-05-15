@@ -3,7 +3,7 @@ use bevy::{
     prelude::*,
 };
 
-use crate::{asteroid, color, physics, utils, VIEWPORT};
+use crate::{asteroid, color, physics, VIEWPORT};
 
 #[derive(Component, Default)]
 pub struct Ship;
@@ -46,7 +46,7 @@ pub fn accelerate_ship(
 
     if input.pressed(KeyCode::ArrowUp) {
         **acceleration =
-            utils::decompose_vec3(*transform.local_x()) * 4096.0 * time.delta_seconds();
+            transform.local_x().xy() * 4096.0 * time.delta_seconds();
     } else {
         **acceleration = Vec2::ZERO;
     }
@@ -57,14 +57,14 @@ pub fn wrap_ships(mut query: Query<&mut Transform, With<Ship>>) {
     let size = VIEWPORT.size();
 
     for mut transform in &mut query {
-        let mut pos = utils::decompose_vec3(transform.translation);
+        let mut pos = transform.translation.xy();
 
         pos += half_size;
         // Euclidian remainder, similar to Java, to discard the sign.
         pos = pos.rem_euclid(size);
         pos -= half_size;
 
-        transform.translation = utils::compose_vec3(pos, transform.translation.z);
+        transform.translation = pos.extend(transform.translation.z);
     }
 }
 
@@ -77,11 +77,11 @@ pub fn ship_asteroid_collision(
         return;
     };
 
-    let ship_bounds = BoundingCircle::new(utils::decompose_vec3(ship_transform.translation), 4.0);
+    let ship_bounds = BoundingCircle::new(ship_transform.translation.xy(), 4.0);
 
     for asteroid_transform in &asteroid_query {
         let asteroid_bounds =
-            BoundingCircle::new(utils::decompose_vec3(asteroid_transform.translation), 8.0);
+            BoundingCircle::new(asteroid_transform.translation.xy(), 8.0);
 
         if ship_bounds.intersects(&asteroid_bounds) {
             commands.entity(ship_entity).despawn();
@@ -106,8 +106,8 @@ pub fn ship_asteroid_collision(
 
 pub fn draw_ships(query: Query<&Transform, With<Ship>>, mut gizmos: Gizmos) {
     for transform in &query {
-        let start = utils::decompose_vec3(transform.translation);
-        let end = utils::decompose_vec3(transform.translation + transform.local_x() * 10.0);
+        let start = transform.translation.xy();
+        let end = (transform.translation + *transform.local_x()).xy() * 10.0;
 
         gizmos.arrow_2d(start, end, color::BRIGHT_WHITE);
     }
